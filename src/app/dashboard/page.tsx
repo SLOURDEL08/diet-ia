@@ -4,9 +4,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/Layout';
+import LoadingScreen from '@/components/LoadingScreen';
 
 const Dashboard: React.FC = () => {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user } = useAuth(); // Inclure `user` ici
   const router = useRouter();
 
   useEffect(() => {
@@ -16,7 +17,7 @@ const Dashboard: React.FC = () => {
   }, [isAuthenticated, loading, router]);
 
   if (loading) {
-    return <p>Chargement...</p>; // Affiche un message de chargement pendant la vérification
+    return <LoadingScreen/>; // Affiche un message de chargement pendant la vérification
   }
 
   if (!isAuthenticated) {
@@ -25,7 +26,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Layout>
-      <h1>Dashboard</h1>
+      <h1>Bonjour, <b>{user?.nom}</b> !</h1> {/* Affiche le nom de l'utilisateur */}
       <p>Bienvenue sur votre tableau de bord !</p>
     </Layout>
   );

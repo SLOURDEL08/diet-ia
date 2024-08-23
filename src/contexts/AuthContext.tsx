@@ -1,27 +1,36 @@
 'use client';
 
-
 import React, { createContext, useState, useContext, useEffect } from 'react';
+
+interface User {
+  id: string;
+  nom: string;
+  email: string;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any;
-  loading: boolean; // Ajout de l'état de chargement
-  login: (token: string, user: any) => void;
+  user: User | null;
+  login: (token: string, user: User) => void;
   logout: () => void;
+  updateUser: (user: User) => void;
+  loading: boolean; // Ajout de l'état de chargement
 }
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   user: null,
-  loading: true, // Initialisation à `true`
   login: () => {},
   logout: () => {},
+  updateUser: () => {},
+  loading: true, // Valeur par défaut pour le chargement
 });
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true); // État de chargement
 
   useEffect(() => {
@@ -30,11 +39,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (token && storedUser) {
       setIsAuthenticated(true);
       setUser(JSON.parse(storedUser));
+    } else {
+      setIsAuthenticated(false);
+      setUser(null);
     }
-    setLoading(false); // La vérification est terminée
+    setLoading(false); // Fin du chargement après avoir vérifié les informations
   }, []);
 
-  const login = (token: string, userData: any) => {
+  const login = (token: string, userData: User) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
     setIsAuthenticated(true);
@@ -48,11 +60,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const updateUser = (userData: User) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    setUser(userData);
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, loading, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, updateUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

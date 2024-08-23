@@ -10,9 +10,15 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 }
 
 export function createToken(payload: any): string {
-  return sign(payload, process.env.JWT_SECRET!, { expiresIn: '1h' });
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+  return sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
 }
 
 export function verifyToken(token: string): any {
-  return verify(token, process.env.JWT_SECRET!);
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET is not defined');
+  }
+  return verify(token, process.env.JWT_SECRET);
 }
