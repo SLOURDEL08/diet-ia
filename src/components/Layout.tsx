@@ -7,7 +7,12 @@ import VisitorHeader from './VisitorHeader';
 import UserHeader from './UserHeader';
 import LoadingScreen from './LoadingScreen';
 
-const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+interface LayoutProps {
+  children: React.ReactNode;
+  className?: string; // Ajouter une prop optionnelle pour la classe
+}
+
+const Layout: React.FC<LayoutProps> = ({ children, className }) => {
   const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
 
@@ -23,11 +28,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }
 
   return (
-    <div className="h-screen">
+    <div className={`h-screen ${className}`}>
       {isAuthenticated ? (
-        <div className="flex h-full">
+        <div className="flex h-full "> {/* Assurez-vous que space-y-4 est appliqué ici */}
           <UserHeader />
-          <main className="flex-1 overflow-auto p-6">
+          <main className="flex-1 space-y-8 overflow-auto p-10">
             {children}
           </main>
         </div>

@@ -2,9 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/syne/Syne-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/syne/Syne-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/syne/Syne-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/syne/Syne-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Syne';
+  src: url('/fonts/syne/Syne-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+}
+
 .spinner-border {
   border-width: 4px;
   border-color: #3490dc;
   border-top-color: transparent;
   border-radius: 50%;
 }
+
+.fontSyneRegular {
+  font-family: 'Syne', sans-serif;
+  font-weight: 400;
+}
+.fontSyneMedium {
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+}
+.fontSyneBold {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+
+.fill-current {
+  fill: currentColor;
+}
+
+.group:hover .fill-current {
+  fill: white;
+}
+
+.shadowed{
+  box-shadow:0px 0px 10px 0px #00000020
+}
+
+
+ .carousel-recipe::-webkit-scrollbar {
+            width: 12px; /* Largeur de la barre de défilement */
+        }
+
+        .carousel-recipe::-webkit-scrollbar-track {
+            background: #f1f1f1; /* Couleur de la piste de défilement */
+        }
+
+        .carousel-recipe::-webkit-scrollbar-thumb {
+            background: #888; /* Couleur de la barre de défilement */
+            border-radius: 10px; /* Coins arrondis de la barre de défilement */
+        }
+
+        .carousel-recipe::-webkit-scrollbar-thumb:hover {
+            background: #555; /* Couleur de la barre de défilement au survol */
+        }
+
+        /* Style de la barre de défilement pour Firefox */
+        .carousel-recipe {
+            scrollbar-width: thin; /* Style fin de la barre de défilement */
+            scrollbar-color: #888 #f1f1f1; /* Couleur de la barre de défilement et de la piste */
+        }
