@@ -26,3 +26,9 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default clientPromise;
+
+// Ajoutez cette fonction
+export async function connectToDatabase() {
+  const client = await clientPromise;
+  return client.db();
+}

@@ -5,10 +5,10 @@ import { hashPassword } from '@/lib/auth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { nom, email, motDePasse } = req.body;
+    const { nom, email, motDePasse, prenom, avatar, birthDate, adress, sexe, phoneNumber } = req.body;
 
     if (!nom || !email || !motDePasse) {
-      return res.status(400).json({ message: 'Tous les champs sont requis' });
+      return res.status(400).json({ message: 'Tous les champs obligatoires doivent être remplis' });
     }
 
     try {
@@ -25,6 +25,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nom,
         email,
         motDePasse: hashedPassword,
+        prenom,
+        avatar,
+        birthDate,
+        adress,
+        sexe,
+        phoneNumber,
         dateInscription: new Date(),
       });
 

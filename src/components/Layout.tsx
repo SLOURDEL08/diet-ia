@@ -1,50 +1,57 @@
 'use client';
 
-// src/components/Layout.tsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import VisitorHeader from './VisitorHeader';
 import UserHeader from './UserHeader';
 import LoadingScreen from './LoadingScreen';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 interface LayoutProps {
   children: React.ReactNode;
-  className?: string; // Ajouter une prop optionnelle pour la classe
+  className?: string;
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, className }) => {
   const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(true);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Simuler un délai de chargement pour la démonstration
-    const timer = setTimeout(() => setLoading(false), 500); // Vous pouvez ajuster ce délai en fonction de vos besoins
+    const handleRouteChange = () => {
+      setLoading(true);
+      // Simuler un délai de chargement
+      const timer = setTimeout(() => setLoading(false), 500);
+      return () => clearTimeout(timer);
+    };
 
-    return () => clearTimeout(timer); // Nettoyage du timer lorsque le composant est démonté
-  }, []);
+    handleRouteChange();
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+    // Ce useEffect se déclenchera à chaque changement de route
+  }, [pathname, searchParams]);
 
   return (
-    <div className={`h-screen ${className}`}>
-      {isAuthenticated ? (
-        <div className="flex h-full "> {/* Assurez-vous que space-y-4 est appliqué ici */}
-          <UserHeader />
-          <main className="flex-1 space-y-8 overflow-auto p-10">
-            {children}
-          </main>
-        </div>
-      ) : (
-        <>
-          <VisitorHeader />
-          <main className="p-6">
-            {children}
-          </main>
-        </>
-      )}
-    </div>
+    <>
+      {loading && <LoadingScreen />}
+      <div className={`h-screen ${className}`}>
+        {isAuthenticated ? (
+          <div className="flex h-full">
+            <UserHeader />
+            <main className="flex-1 p-10 space-y-8 overflow-hidden overflow-y-scroll">
+              {children}
+            </main>
+          </div>
+        ) : (
+          <>
+            <VisitorHeader />
+            <main className="p-6">
+              {children}
+            </main>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+button{
+  padding:0px;
+  margin:0px;
+  
+}
+
 @font-face {
   font-family: 'Syne';
   src: url('/fonts/syne/Syne-Regular.ttf') format('truetype');
@@ -44,6 +50,10 @@
   border-radius: 50%;
 }
 
+.fontSyneLight {
+  font-family: 'Syne', sans-serif;
+  font-weight: 300;
+}
 .fontSyneRegular {
   font-family: 'Syne', sans-serif;
   font-weight: 400;
@@ -55,6 +65,10 @@
 .fontSyneBold {
   font-family: 'Syne', sans-serif;
   font-weight: 700;
+}
+.fontSyneXBold {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
 }
 
 
@@ -72,24 +86,206 @@
 
 
  .carousel-recipe::-webkit-scrollbar {
-            width: 12px; /* Largeur de la barre de défilement */
+            width: 0px; /* Largeur de la barre de défilement */
         }
 
         .carousel-recipe::-webkit-scrollbar-track {
-            background: #f1f1f1; /* Couleur de la piste de défilement */
+            background: #f1f1f100; /* Couleur de la piste de défilement */
         }
 
         .carousel-recipe::-webkit-scrollbar-thumb {
-            background: #888; /* Couleur de la barre de défilement */
+            background: #f1f1f100; /* Couleur de la barre de défilement */
             border-radius: 10px; /* Coins arrondis de la barre de défilement */
         }
 
         .carousel-recipe::-webkit-scrollbar-thumb:hover {
-            background: #555; /* Couleur de la barre de défilement au survol */
+            background: #f1f1f100; /* Couleur de la barre de défilement au survol */
         }
 
         /* Style de la barre de défilement pour Firefox */
         .carousel-recipe {
             scrollbar-width: thin; /* Style fin de la barre de défilement */
-            scrollbar-color: #888 #f1f1f1; /* Couleur de la barre de défilement et de la piste */
+            scrollbar-color: #f1f1f100 #f1f1f100; /* Couleur de la barre de défilement et de la piste */
+
         }
+
+        .scrollhide::-webkit-scrollbar{
+display: none;
+width: 0px;
+        }
+
+          .scrollhide::-webkit-scrollbar-track {
+            background: #f1f1f100; /* Couleur de la piste de défilement */
+        }
+
+        .overcarou{
+                      background: linear-gradient(270deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0) 10%, rgba(255, 255, 255, 0) 89.27%, rgba(0, 0, 0, 0) 100%) !important;
+                      pointer-events: none;
+
+        }
+
+       .limited-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limite à 3 lignes */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-xxs{
+  font-size:0.65rem
+}
+
+.gradiend-red {
+
+background: linear-gradient(45deg, rgba(248, 113, 113, 1), rgba(248, 113, 113, 0.5), rgba(248, 113, 113, 1), rgba(248, 113, 113, 0.5), rgba(248, 113, 113, 1), rgba(248, 113, 113, 0.5));
+    background-size: 400% 400%;
+    animation: Gradient 10s ease reverse infinite;
+}
+@keyframes Gradient {
+                0% {
+                  background-position: 0% 50%;
+                }
+                50% {
+                  background-position: 100% 50%;
+                }
+                100% {
+                  background-position: 0% 50%;
+                }
+              }
+
+
+.gradiend-purple {
+background: linear-gradient(45deg, rgba(192, 132, 252, 1), rgba(192, 132, 252, 0.5), rgba(192, 132, 252, 1), rgba(192, 132, 252, 0.5), rgba(192, 132, 252, 1), rgba(192, 132, 252, 0.5));
+    background-size: 400% 400%;
+    animation: Gradient 10s ease  infinite;
+}
+
+.gradiend-green {
+background: linear-gradient(to right, rgba(134, 239, 172 , 1), rgba(134, 239, 172,0.5));
+background: linear-gradient(45deg, rgba(134, 239, 172 , 1), rgba(134, 239, 172,0.5), rgba(134, 239, 172 , 1), rgba(134, 239, 172,0.5), rgba(134, 239, 172 , 1), rgba(134, 239, 172,0.5));
+    background-size: 400% 400%;
+    animation: Gradient 4s ease infinite reverse;
+}
+
+.bged{
+background: linear-gradient(45deg, rgb(255, 255, 255), rgba(234, 234, 234, 0.5), rgb(255, 255, 255), rgba(255, 255, 255, 0.5), rgb(228, 228, 228), rgba(217, 217, 217, 0.5));
+    background-size: 400% 400%;
+    animation: Gradient 10s ease infinite ;
+}
+
+.maxmd{
+}
+.gradiend-app {
+  background: linear-gradient(to bottom, #ff5e5b, #ff5e5b);
+
+}
+
+.gradiend-layout {
+  background: linear-gradient(to right, #ff5e5b00, #ff5e5b00);
+
+}
+
+.ellipsis {
+  display: -webkit-box; /* Utilisé pour les propriétés flexibles */
+  -webkit-line-clamp: 1; /* Limite le texte à une ligne */
+  -webkit-box-orient: vertical; /* Définit l'orientation de la boîte en mode vertical */
+  overflow: hidden; /* Cache le texte qui dépasse */
+  text-overflow: ellipsis; /* Affiche des points de suspension si le texte est trop long */
+}
+
+.activerecipe{
+    background: #ff5e5b;
+    border-color:#ff5e5b;
+
+
+
+  }
+
+
+/* src/styles/globals.css */
+
+/* Par défaut : texte et icônes blancs */
+.link-default {
+  color: white;
+}
+
+.link-default svg {
+  color: white;
+}
+
+/* Survol : fond blanc et texte + icônes noirs */
+.link-hover:hover,
+.link-hover.group-hover:bg-white {
+  background-color: white;
+  color: black;
+}
+
+.link-hover:hover svg,
+.link-hover.group-hover:text-black {
+  color: black;
+}
+
+/* Actif : fond blanc et texte + icônes noirs */
+.link-active {
+  background-color: white;
+  color: black;
+}
+
+.link-active svg {
+  color: black;
+}
+
+
+
+.filterrecipe:hover{
+  background: #ff5e5b;
+  transition:0s ease-in-out
+
+}
+
+.shadow-perso{
+  box-shadow: 0px 0px 30px 0px #00000020;
+}
+
+.hoverrecipe{
+}
+
+.hoverrecipe:hover {
+  background-color: #ff5e5b;
+  border-color:#ff5e5b
+}
+
+.activerecipe{
+    background-color: #ff5e5b;
+
+}
+
+.activerecipe .detailblock{
+background-color:white
+}
+
+.hoverrecipe:hover span {
+color:white}
+
+
+
+.hoverrecipe:hover .ctn-icon-recipe{
+  background: white!important;
+}
+
+
+.graydiended{
+background: linear-gradient(to right,#ffffff, #ffffff);
+}
+
+label{
+  margin: 0px;
+  padding:0px;
+
+}
+
+input{
+  margin: 0px;
+  padding:0px;
+}

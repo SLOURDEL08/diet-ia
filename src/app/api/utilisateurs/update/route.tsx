@@ -1,33 +1,39 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import clientPromise from '@/lib/mongodb';
 import { verifyToken, hashPassword } from '@/lib/auth';
 import { ObjectId } from 'mongodb';
 
-export async function PUT(request: Request) {
-  const token = request.headers.get('Authorization')?.split(' ')[1];
-
-  if (!token) {
-    return NextResponse.json({ message: 'Non autorisé' }, { status: 401 });
-  }
-
+export async function PUT(request: NextRequest) {
   try {
+    const token = request.headers.get('Authorization')?.split(' ')[1];
+
+    if (!token) {
+      return NextResponse.json({ message: 'Non autorisé' }, { status: 401 });
+    }
+
     const decodedToken = verifyToken(token);
     const { userId } = decodedToken;
 
-    const body = await request.json();
-    const { nom, email, motDePasse } = body;
+    const updateData = await request.json();
 
     const client = await clientPromise;
     const db = client.db();
 
-    const updateData: any = {};
-    if (nom) updateData.nom = nom;
-    if (email) updateData.email = email;
-    if (motDePasse) updateData.motDePasse = await hashPassword(motDePasse);
+    const updateFields: any = {};
+    
+    if (updateData.nom) updateFields.nom = updateData.nom;
+    if (updateData.email) updateFields.email = updateData.email;
+    if (updateData.motDePasse) updateFields.motDePasse = await hashPassword(updateData.motDePasse);
+    if (updateData.prenom) updateFields.prenom = updateData.prenom;
+    if (updateData.avatar) updateFields.avatar = updateData.avatar;
+    if (updateData.birthDate) updateFields.birthDate = updateData.birthDate;
+    if (updateData.adress) updateFields.adress = updateData.adress;
+    if (updateData.sexe) updateFields.sexe = updateData.sexe;
+    if (updateData.phoneNumber) updateFields.phoneNumber = updateData.phoneNumber;
 
     const result = await db.collection('utilisateurs').findOneAndUpdate(
       { _id: new ObjectId(userId) },
-      { $set: updateData },
+      { $set: updateFields },
       { returnDocument: 'after' }
     );
 
@@ -39,6 +45,13 @@ export async function PUT(request: Request) {
       id: result._id.toString(),
       nom: result.nom,
       email: result.email,
+      prenom: result.prenom,
+      avatar: result.avatar,
+      birthDate: result.birthDate,
+      adress: result.adress,
+      sexe: result.sexe,
+      phoneNumber: result.phoneNumber,
+      dateInscription:result.dateInscription
     };
 
     return NextResponse.json(updatedUser);

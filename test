@@ -1,0 +1,54 @@
+diet-ia/
+│
+├── frontend/
+│   ├── src/
+│   │   ├── app/
+│   │   │    ├── dashboard/
+│   │   │      └── page.tsx
+│   │   │    ├── login/
+│   │   │      └── page.tsx
+│   │   │    └── mon-compte/
+│   │   │      └── page.tsx
+│   │   │    └── register/
+│   │   │      └── page.tsx
+│   │   │    └── ux/
+│   │   │      └── IconApp.tsx
+│   │   │    └── favicon.ico
+│   │   │    └── layout.tsx
+│   │   │    └── page.tsx
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │    └── AvatarUpload.tsx
+│   │   │    └── Layout.tsx
+│   │   │    └── LoadingScreen.tsx
+│   │   │    └── UserHeader.tsx
+│   │   │    └── VisitorHeader.tsx
+│   │   ├── contexts/
+│   │   │    └── AuthContext.tsx
+│   │   ├── style/
+│   ├── public/
+│   ├── package.json
+│   └── next.config.js
+│
+├── backend/
+│   ├── src/
+│   │   ├── api/
+│   │   │    └── auth/
+│   │   │      └── login/
+│   │   │        └── route.ts
+│   │   │      └── register/
+│   │   │        └── route.ts
+│   │   │    └── upload-avatar/
+│   │   │        └── upload-avatar.ts
+│   │   │    └── utilisateurs/
+│   │   │        └── update/
+│   │   │           └── route.tsx
+│   │   ├── models/
+│   │   │    └── Utilisateurs.ts
+│   │   └── lib/
+│   │   │    └── auth.ts
+│   │   │    └── mongodb.ts
+│   ├── package.json
+│   └── server.js
+│
+└── package.json (package.json racine)

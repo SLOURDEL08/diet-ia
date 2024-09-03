@@ -3,6 +3,7 @@
 import type { NextPage } from 'next';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Layout from '@/components/Layout';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -10,19 +11,21 @@ const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [motDePasse, setMotDePasse] = useState('');
   const [erreur, setErreur] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const { login, isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push('/dashboard'); // Redirige vers le tableau de bord si l'utilisateur est déjà connecté
+      router.push('/dashboard');
     }
   }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErreur('');
+    setIsLoading(true);
 
     try {
       const res = await fetch('/api/auth/login', {
@@ -31,21 +34,24 @@ const Login: NextPage = () => {
         body: JSON.stringify({ email, motDePasse }),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
         login(data.token, data.utilisateur);
         router.push('/dashboard');
       } else {
-        const error = await res.json();
-        setErreur(error.message);
+        setErreur(data.message || 'Une erreur est survenue lors de la connexion');
       }
     } catch (error) {
+      console.error('Erreur de connexion:', error);
       setErreur('Une erreur est survenue lors de la connexion');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   if (isAuthenticated) {
-    return null; // Empêche le rendu du formulaire de connexion si l'utilisateur est connecté
+    return null;
   }
 
   return (
@@ -58,6 +64,7 @@ const Login: NextPage = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
+          required
         />
         <input
           type="password"
@@ -65,12 +72,22 @@ const Login: NextPage = () => {
           value={motDePasse}
           onChange={(e) => setMotDePasse(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
+          required
         />
         {erreur && <p className="text-red-500 mb-4">{erreur}</p>}
-        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded">
-          Se connecter
+        <button 
+          type="submit" 
+          className="w-full p-2 bg-blue-500 text-white rounded"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Connexion en cours...' : 'Se connecter'}
         </button>
       </form>
+      <div className="text-center mt-4">
+        <Link href="/forgot-password" className="text-blue-500 hover:text-blue-600">
+          Mot de passe oublié ?
+        </Link>
+      </div>
     </Layout>
   );
 };

@@ -13,7 +13,7 @@ export function createToken(payload: any): string {
   if (!process.env.JWT_SECRET) {
     throw new Error('JWT_SECRET is not defined');
   }
-  return sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+  return sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
 }
 
 export function verifyToken(token: string): any {
