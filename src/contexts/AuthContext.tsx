@@ -1,33 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
-
-interface User {
-  id: string;
-  nom: string;
-  email: string;
-  password: string;
-  prenom?: string;
-  avatar?: any;
-  birthDate?: string;
-  adress?: string;
-  sexe?: string;
-  phoneNumber?: string;
-  dateInscription: string;
-}
-
-interface AuthContextType {
-  isAuthenticated: boolean;
-  user: User | null;
-  login: (token: string, user: User) => void;
-  logout: () => void;
-  updateUser: (updates: Partial<User>) => void;
-  refreshToken: () => Promise<void>;
-  loading: boolean;
-  favorites: string[];
-  addFavorite: (recipeId: string) => Promise<void>;
-  removeFavorite: (recipeId: string) => Promise<void>;
-}
+import { UserComplet, AuthContextType } from '@/types';
 
 const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
@@ -46,7 +20,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserComplet | null>(null);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState<string[]>([]);
 
@@ -67,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(false);
   }, []);
 
-  const login = useCallback((token: string, userData: User) => {
+  const login = useCallback((token: string, userData: UserComplet) => {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(userData));
     setIsAuthenticated(true);
@@ -83,7 +57,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setFavorites([]);
   }, []);
 
- const updateUser = useCallback((updates: Partial<User>) => {
+  const updateUser = useCallback((updates: Partial<UserComplet>) => {
     setUser(prevUser => {
       if (!prevUser) return null;
       const updatedUser = { ...prevUser, ...updates };
@@ -172,7 +146,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-return (
+  return (
     <AuthContext.Provider 
       value={{ 
         isAuthenticated, 

@@ -1,6 +1,8 @@
+// src/models/Recipe.ts
 import mongoose from 'mongoose';
+import { Recipe } from '@/types';
 
-const RecipeSchema = new mongoose.Schema({
+const RecipeSchema = new mongoose.Schema<Recipe>({
   title: { type: String, required: true },
   description: { type: String, required: true },
   preparationTime: { type: Number, required: true },
@@ -10,4 +12,4 @@ const RecipeSchema = new mongoose.Schema({
   image: { type: String, required: true },
 });
 
-export default mongoose.models.Recipe || mongoose.model('Recipe', RecipeSchema);
+export default mongoose.models.Recipe || mongoose.model<Recipe>('Recipe', RecipeSchema);

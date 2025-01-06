@@ -1,24 +1,33 @@
-import { UploadAvatarIcon, BinIcon } from '@/app/ux/IconApp';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { UploadAvatarIcon, BinIcon } from '@/app/ux/IconApp';
 
-interface AvatarUploadProps {
+interface AvatarDisplayProps {
   currentAvatar: string;
-  onAvatarChange: (url: string) => void;
+  onAvatarChange?: (url: string) => void;
   className?: string;
+  upload?: boolean;
+  width?: number | string;
+  height?: number | string;
 }
 
-const AvatarUpload: React.FC<AvatarUploadProps> = ({ currentAvatar, onAvatarChange, className }) => {
+const AvatarDisplay: React.FC<AvatarDisplayProps> = ({ 
+  currentAvatar, 
+  onAvatarChange, 
+  className,
+  upload = true,
+  width = 160,
+  height = 160
+}) => {
   const [previewUrl, setPreviewUrl] = useState(currentAvatar);
   const [isLoading, setIsLoading] = useState(false);
-  const { updateUser } = useAuth();
 
   useEffect(() => {
     setPreviewUrl(currentAvatar);
   }, [currentAvatar]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!upload) return;
     const file = e.target.files?.[0];
     if (file) {
       const formData = new FormData();
@@ -41,8 +50,7 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ currentAvatar, onAvatarChan
           await uploadTime;
           const newAvatarUrl = `${avatarUrl}?v=${Date.now()}`;
           setPreviewUrl(newAvatarUrl);
-          onAvatarChange(newAvatarUrl);
-          updateUser({ avatar: newAvatarUrl });
+          onAvatarChange?.(newAvatarUrl);
         } else {
           console.error('Erreur lors du téléchargement');
         }
@@ -55,27 +63,31 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ currentAvatar, onAvatarChan
   };
 
   const handleUpdate = () => {
-    document.getElementById('avatar-upload')?.click();
+    if (upload) {
+      document.getElementById('avatar-upload')?.click();
+    }
   };
 
   const handleRemove = () => {
+    if (!upload) return;
     const defaultAvatar = '/default-avatar.jpg';
     setPreviewUrl(defaultAvatar);
-    onAvatarChange(defaultAvatar);
-    updateUser({ avatar: defaultAvatar });
+    onAvatarChange?.(defaultAvatar);
   };
 
   return (
-    <div className={`flex flex-col group items-center gap-4 ${className}`}>
-      <input
-        type="file"
-        onChange={handleFileChange}
-        accept="image/*"
-        className="hidden"
-        id="avatar-upload"
-      />
+    <div className={`flex flex-col flex-col-reverse group items-center gap-4 ${className}`}>
+      {upload && (
+        <input
+          type="file"
+          onChange={handleFileChange}
+          accept="image/*"
+          className="hidden"
+          id="avatar-upload"
+        />
+      )}
 
-      <div className="relative">
+      <div className="relative" style={{ width, height }}>
         {isLoading && (
           <div className="absolute inset-0 flex items-center justify-center z-10">
             <svg className="animate-spin w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -85,37 +97,42 @@ const AvatarUpload: React.FC<AvatarUploadProps> = ({ currentAvatar, onAvatarChan
           </div>
         )}
         {previewUrl && (
-          <div className='w-40 relative h-40 overflow-hidden rounded-full hover:border-[#ff5e5b] transition border-8'>
+          <div className='relative w-full h-full overflow-hidden rounded-full hover:border-[#ff5e5b] transition border-8'>
             <Image
               src={previewUrl}
               alt="Avatar preview"
-              fill
-              className={`rounded-full transform transition-transform hover:opacity-50 ease-in-out hover:scale-110 ${isLoading ? 'opacity-50' : ''}`}
+              layout="fill"
+              objectFit="cover"
+              className={`rounded-full transform transition-transform ${upload ? 'hover:opacity-50 ease-in-out hover:scale-110' : ''} ${isLoading ? 'opacity-50' : ''}`}
             />
           </div>
         )}
       </div>
 
-      <button
-        onClick={handleUpdate}
-        className="px-4 py-2 bg-[#ff5e5b] font-semibold flex items-center gap-2 rounded-full text-white"
-        disabled={isLoading}
-      >
-        <UploadAvatarIcon className='w-4 h-4' />
-        {'Upload'}
-      </button>
+      {upload && (
+        <>
+          <button
+            onClick={handleUpdate}
+            className="px-4 text-xs py-2 bg-[#ff5e5b] font-semibold flex items-center gap-2 rounded-full text-white"
+            disabled={isLoading}
+          >
+            <UploadAvatarIcon className='w-3 h-3' />
+            {'Upload'}
+          </button>
 
-      {previewUrl && previewUrl !== '/default-avatar.jpg' && (
-        <button
-          onClick={handleRemove}
-          className="px-4 py-2 text-black border font-semibold border-black opacity-60 hover:bg-black hover:text-white rounded-full flex items-center gap-2 hover:opacity-100"
-        >
-          <BinIcon className='w-4 h-4' />
-          {'Supprimer'}
-        </button>
+          {previewUrl && previewUrl !== '/default-avatar.jpg' && (
+            <button
+              onClick={handleRemove}
+              className="px-4 py-2 text-black border font-semibold border-black opacity-60 hover:bg-black hover:text-white rounded-full flex items-center gap-2 hover:opacity-100"
+            >
+              <BinIcon className='w-4 h-4' />
+              {'Supprimer'}
+            </button>
+          )}
+        </>
       )}
     </div>
   );
 };
 
-export default AvatarUpload;
+export default AvatarDisplay;

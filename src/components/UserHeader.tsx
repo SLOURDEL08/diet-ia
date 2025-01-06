@@ -32,7 +32,7 @@ const UserHeader: React.FC = () => {
               },
              
               {
-                href: '/mon-d',
+                href: '/mon-objectif',
                 label: 'Mon objectif',
                 icon: <TargetIcon />,
               },
